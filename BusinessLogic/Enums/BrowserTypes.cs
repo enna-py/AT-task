@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace BusinessLogic.Enums
 {
-    class BrowserTypes
+    public enum BrowserTypes
     {
+        Chrome,
+        Edge,
+        FireFox
     }
 }
