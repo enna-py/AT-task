@@ -1,52 +1,31 @@
-﻿using BusinessLogic.DriverFactory;
+﻿using System.Collections.Concurrent;
+using BusinessLogic.DriverFactory;
 using BusinessLogic.Enums;
 using OpenQA.Selenium;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace BusinessLogic.Driver
+namespace BusinessLogic.CoreWebDriver
 {
-    public class DriverInstanceManager
+    public static class DriverInstanceManager
     {
-        private static DriverInstanceManager _instance;
-        private IWebDriver _driver;
-        private DriverInstanceManager(BrowserTypes browserType)
-        {
-            _driver = WebDriverFactory.CreateDriver(browserType);
-        }
+        private static readonly ConcurrentDictionary<int, IWebDriver> DriverDictionary = [];
 
-        private static readonly object _lock = new();
-        public static DriverInstanceManager Instance(BrowserTypes browserType)
+        public static IWebDriver GetDriver(BrowserTypes browserType)
         {
-            if (_instance == null)
+            int threadId = Environment.CurrentManagedThreadId;
+
+            return DriverDictionary.GetOrAdd(threadId, _ =>
             {
-                lock (_lock)
-                {
-                    if (_instance == null)
-                    {
-                        _instance = new DriverInstanceManager(browserType);
-                    }
-                }
-            }
-            return _instance;
+                return WebDriverFactory.CreateDriver(browserType);
+            });
         }
-
-
-        public IWebDriver Driver
+        public static void QuitDriver()
         {
-            get { return _driver; }
-        }
+            int threadId = Environment.CurrentManagedThreadId;
 
-        public void QuitDriver()
-        {
-            if (_driver != null)
+            if (DriverDictionary.TryRemove(threadId, out var driver))
             {
-                _driver.Quit();
-                _driver = null;
-                _instance = null;
+                driver.Quit();
+                driver.Dispose();
             }
         }
     }

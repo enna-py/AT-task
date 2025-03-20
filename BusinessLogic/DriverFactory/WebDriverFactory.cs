@@ -1,13 +1,8 @@
-﻿using OpenQA.Selenium.Chrome;
+﻿using BusinessLogic.Enums;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
-using OpenQA.Selenium;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BusinessLogic.Enums;
 
 namespace BusinessLogic.DriverFactory
 {
@@ -15,17 +10,13 @@ namespace BusinessLogic.DriverFactory
     {
         public static IWebDriver CreateDriver(BrowserTypes browserType)
         {
-            switch (browserType)
+            return browserType switch
             {
-                case BrowserTypes.Chrome:
-                    return new ChromeDriver();
-                case BrowserTypes.FireFox:
-                    return new FirefoxDriver();
-                case BrowserTypes.Edge:
-                    return new EdgeDriver();
-                default:
-                    throw new ArgumentException("Unsupported browser type: " + browserType);
-            }
+                BrowserTypes.Chrome => new ChromeDriver(),
+                BrowserTypes.FireFox => new FirefoxDriver(),
+                BrowserTypes.Edge => new EdgeDriver(),
+                _ => throw new ArgumentException("Unsupported browser type: " + browserType),
+            };
         }
     }
 }
