@@ -18,5 +18,34 @@ namespace BusinessLogic.Pages
             this.driver = driver;
             wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
         }
+
+        private IWebElement userNameInput => driver.FindElement(By.Id("user-name"));
+        private IWebElement passwordInput => driver.FindElement(By.Id("password"));
+        private IWebElement errorMessage => driver.FindElement(By.XPath("//div[contains(@class, 'error-message-container')]//h3[@data-test='error']"));
+        
+        public void EnterUserName(string userName)
+        {
+            userNameInput.SendKeys(userName);
+        }
+
+        public void EnterPassword(string password)
+        {
+            passwordInput.SendKeys(password);
+        }
+
+        public void ClearUserName()
+        {
+            userNameInput.Clear();
+        }
+
+        public void ClearPassword()
+        {
+            passwordInput.Clear();
+        }
+
+        public string GetErrorMessage()
+        {
+            return errorMessage.Text;
+        }
     }
 }
