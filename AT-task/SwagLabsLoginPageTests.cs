@@ -51,8 +51,10 @@ namespace AT_task
 
         [Theory]
         [InlineData(BrowserTypes.Chrome, "standard_user", "secret_sauce")]
-        [InlineData(BrowserTypes.Edge, "standard_user", "secret_sauce")]
-        [InlineData(BrowserTypes.FireFox, "standard_user", "secret_sauce")]
+        [InlineData(BrowserTypes.Edge, "problem_user", "secret_sauce")]
+        [InlineData(BrowserTypes.FireFox, "performance_glitch_user", "secret_sauce")]
+        [InlineData(BrowserTypes.FireFox, "error_user", "secret_sauce")]
+        [InlineData(BrowserTypes.FireFox, "visual_user", "secret_sauce")]
         public void LoginForm_WithCredentialsByPassingUserNameAndPassword_ShouldSuccess(BrowserTypes browserType, string userName, string password)
         {
             IWebDriver driver = DriverInstanceManager.GetDriver(browserType);
