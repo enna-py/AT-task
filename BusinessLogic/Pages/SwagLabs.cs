@@ -11,11 +11,11 @@ namespace BusinessLogic.Pages
             this.driver = driver;
         }
 
-        private IWebElement title => driver.FindElement(By.ClassName("app_logo"));
+        private IWebElement Title => driver.FindElement(By.ClassName("app_logo"));
 
         public string GetTitle()
         {
-            return title.Text;
+            return Title.Text;
         }
     }
 }
